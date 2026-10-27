@@ -1,4 +1,4 @@
-import { Icon, type IconName } from '@compagnons-ia/ds';
+import { Icon, type IconName } from '@aimotic/ds';
 import { Block, Section, Spec } from '../ui';
 
 const NAMES: IconName[] = [

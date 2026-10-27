@@ -97,7 +97,7 @@ svg.lucide{stroke-width:1.75}
 .ds-choice__box svg.lucide{stroke-width:2.5}
 
 /* ---------- actions: Button ---------- */
-/* COMPAGNONS IA — LA DOCTRINE ARRONDIE, écrite ici une fois pour tout le fichier :
+/* AIMOTIC — LA DOCTRINE ARRONDIE, écrite ici une fois pour tout le fichier :
    TOUT CE QUI SE PRESSE OU SE REMPLIT EST PILL. Autre RÈGLE, pas autre valeur — aucun
    rayon du socle n'est redéclaré, ce sont les règles du projet qui pointent --radius-pill.
    Sont pill : boutons et carrés d'icône, champs / selects / déclencheur de date, items
@@ -379,7 +379,7 @@ svg.lucide{stroke-width:1.75}
 .ds-range__bounds{display:flex;justify-content:space-between;margin-inline:var(--space-1)}
 .ds-range.is-disabled{opacity:.5}
 .ds-range.is-disabled .ds-range__track,.ds-range.is-disabled .ds-range__thumb{cursor:not-allowed}
-/* COMPAGNONS IA — PARCOURS CŒUR. L'OPTION : une réponse d'onboarding, pill, qui enveloppe
+/* AIMOTIC — PARCOURS CŒUR. L'OPTION : une réponse d'onboarding, pill, qui enveloppe
    un .ds-choice (radio ou case). Structure :
      <label class="ds-option"><span class="ds-choice"><input type="radio|checkbox">…case
      .ds-choice__box…</span>Libellé</label>
@@ -474,7 +474,7 @@ svg.lucide{stroke-width:1.75}
 .ds-badge--neutral{background:var(--pill-neutral-bg);color:var(--pill-neutral-fg)}
 .ds-badge--accent{background:var(--accent);color:var(--primary-readable)}
 .ds-badge--outline{background:transparent;color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border)}
-/* COMPAGNONS IA — PARCOURS CŒUR. Le badge CARTE : l'étiquette de centre d'intérêt d'un
+/* AIMOTIC — PARCOURS CŒUR. Le badge CARTE : l'étiquette de centre d'intérêt d'un
    persona, blanche et filetée, faite pour être posée sur la crème (un îlot, une fiche). Son
    texte est du CONTENU de persona : l'emoji y est permis, jamais dans l'interface. */
 .ds-badge--card{background:var(--card);color:var(--foreground);box-shadow:inset 0 0 0 1px var(--border);font-weight:var(--weight-medium)}
@@ -834,7 +834,7 @@ svg.lucide{stroke-width:1.75}
 /* L'ICÔNE de l'item actif porte --brand-via, l'arrêt MÉDIAN du dégradé.
    ⚠️ IL N'Y A PLUS D'ÉCART SUR CETTE MARQUE, et ce paragraphe le dit maintenant. Les
    chiffres qui vivaient ici (« 2,29:1 en clair, 5,34:1 en sombre ») venaient du GABARIT et
-   n'ont jamais été remesurés au portage. Sur le grenat Compagnons IA, la plaque active étant
+   n'ont jamais été remesurés au portage. Sur le grenat d'Aimotic, la plaque active étant
    désormais --background (doctrine « le blanc est la surface portée ») : 6,59:1 en clair,
    3,39:1 en sombre — les deux passent le seuil 3:1 des graphiques non textuels (la plaque
    précédente, --surface-alt, mesurait 6,31 et 2,70 : le changement RÉPARE le sombre).

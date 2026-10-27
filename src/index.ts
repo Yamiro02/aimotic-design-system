@@ -1,16 +1,16 @@
 /**
- * @compagnons-ia/ds — le design system de Compagnons IA.
+ * @aimotic/ds — le design system d'Aimotic.
  *
  * Deux couches, deux imports, toujours : le socle ne porte aucune couleur, la marque ne
  * porte aucune structure. Il n'existe pas d'entrée qui monte une marque toute seule — celle
  * qu'une app charge est visible dans son code, jamais implicite.
  *
  * Les styles sont un import séparé, en JS :
- *   import '@compagnons-ia/ds/core.css';
- *   import '@compagnons-ia/ds/brand-compagnons-ia.css';
+ *   import '@aimotic/ds/core.css';
+ *   import '@aimotic/ds/brand-aimotic.css';
  *
  * La couche Tailwind v4 s'importe depuis le CSS de l'app, jamais en JS :
- *   @import '@compagnons-ia/ds/theme.css';
+ *   @import '@aimotic/ds/theme.css';
  */
 
 /* icons */
@@ -112,7 +112,7 @@ export { Halo } from './components/brand/Halo';
 export type { HaloProps } from './components/brand/Halo';
 /* HaloHot et ContentIcon ne sont PAS exportés ici : ce sont des outils de MINIATURE et de
    MOTION, pas d'interface. Ils vivent sur le sous-chemin optionnel
-   `@compagnons-ia/ds/brand-content`, avec `brand-content.css` en face. */
+   `@aimotic/ds/brand-content`, avec `brand-content.css` en face. */
 export { Avatar } from './components/brand/Avatar';
 export type { AvatarProps } from './components/brand/Avatar';
 

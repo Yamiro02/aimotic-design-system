@@ -1,4 +1,4 @@
-import { BRAND_MONOGRAM, BRAND_NAME, BRAND_WORDMARK_LINES } from '@compagnons-ia/ds';
+import { BRAND_MONOGRAM, BRAND_NAME, BRAND_WORDMARK_LINES } from '@aimotic/ds';
 
 /* L'IDENTITÉ DU PROJET — pas celle du design system.
    Un mot-marque, un lieu, un prénom d'exemple : ce sont des CONTENUS d'application, pas

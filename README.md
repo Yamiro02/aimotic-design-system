@@ -1,6 +1,6 @@
-# @compagnons-ia/ds
+# @aimotic/ds
 
-**Le design system de Compagnons IA.** Deux couches qui ne se mélangent pas : un **socle**
+**Le design system d'Aimotic.** Deux couches qui ne se mélangent pas : un **socle**
 générique — structure, comportements, échelles, rail de contrôles, motion, 40 composants
 React + TypeScript, **zéro couleur** — et la **marque** du produit, qui porte les couleurs,
 les polices, les dégradés et la lueur.
@@ -15,8 +15,8 @@ monte une marque toute seule : celle qu'une app charge est visible dans son code
 implicite.
 
 ```ts
-import '@compagnons-ia/ds/core.css';           // la structure, invariante
-import '@compagnons-ia/ds/brand-compagnons-ia.css';  // la marque du produit
+import '@aimotic/ds/core.css';           // la structure, invariante
+import '@aimotic/ds/brand-aimotic.css';  // la marque du produit
 ```
 
 ## Par où commencer
@@ -28,7 +28,7 @@ import '@compagnons-ia/ds/brand-compagnons-ia.css';  // la marque du produit
 | **l'historique du portage** | [`PORTAGE.md`](PORTAGE.md) · [`GETTING-STARTED.md`](GETTING-STARTED.md) — utiles à lire, plus la source de vérité |
 | **quiconque écrit un écran AVEC ce système** | **[`docs/PIEGES.md`](docs/PIEGES.md)** — ce que le code livré fait et qui ne se devine pas |
 
-La marque du produit est `src/styles/brand-compagnons-ia.css` : grenat et crème, Nunito
+La marque du produit est `src/styles/brand-aimotic.css` : grenat et crème, Nunito
 Sans auto-hébergée, doctrine arrondie, surfaces blanches. Le socle, lui, ne porte **aucune
 couleur** — `bash check-literals.sh` le prouve à chaque lint. Le contrat qu'une autre
 marque devrait remplir reste lisible dans `src/styles/brand.template.css`.
@@ -61,7 +61,7 @@ marque devrait remplir reste lisible dans `src/styles/brand.template.css`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/compagnons-ia-design-system#v0.7.1
+npm i github:Yamiro02/aimotic-design-system#v0.8.0
 ```
 
 > **Une seule numérotation fait foi ici : celle de ce dépôt.** Elle est repartie de `0.1.0`
@@ -106,13 +106,13 @@ Socle plus marque. Deux lignes, pas une : c'est ce qui rend explicite la marque 
 
 ```ts
 // src/main.tsx — une app du projet
-import '@compagnons-ia/ds/core.css';
-import '@compagnons-ia/ds/brand-compagnons-ia.css';
+import '@aimotic/ds/core.css';
+import '@aimotic/ds/brand-aimotic.css';
 ```
 
 ```ts
 // ou, pour un projet qui a sa propre marque
-import '@compagnons-ia/ds/core.css';
+import '@aimotic/ds/core.css';
 import './brand-client.css';        // écrit à partir de brand.template.css
 ```
 
@@ -131,7 +131,7 @@ jetons et polices compris. L'import JS reste la voie recommandée : c'est celle 
 vitrine, donc celle qui est vérifiée à chaque version.
 
 **L'extension métier est à part et optionnelle.** `brand-content.css` et le sous-chemin
-`@compagnons-ia/ds/brand-content` portent les halos de vignette et les icônes de plateformes : de
+`@aimotic/ds/brand-content` portent les halos de vignette et les icônes de plateformes : de
 quoi fabriquer une miniature ou une carte de motion, pas un écran. Une app d'interface ne
 les importe pas et ne perd rien.
 
@@ -143,7 +143,7 @@ ne le verrait pas.
 
 ```css
 /* src/index.css — l'entrée CSS de l'app */
-@import '@compagnons-ia/ds/theme.css';
+@import '@aimotic/ds/theme.css';
 ```
 
 ```ts
@@ -187,7 +187,7 @@ aucune valeur.
 ### 3. Les composants
 
 ```tsx
-import { Button, Card, Icon } from '@compagnons-ia/ds';
+import { Button, Card, Icon } from '@aimotic/ds';
 
 <Card variant="feature" size="lg">
   <h2>J'ai construit cette <span className="accent">app</span> en un week-end</h2>
@@ -203,9 +203,9 @@ Les outils internes desktop importent en plus un module d'échelle, qui adapte l
 par palier de largeur d'écran pour garder une mise en page effective proche de la maquette :
 
 ```ts
-import '@compagnons-ia/ds/core.css';
-import '@compagnons-ia/ds/brand-compagnons-ia.css';
-import '@compagnons-ia/ds/app-scale.css';   // outils internes desktop uniquement
+import '@aimotic/ds/core.css';
+import '@aimotic/ds/brand-aimotic.css';
+import '@aimotic/ds/app-scale.css';   // outils internes desktop uniquement
 ```
 
 Les paliers sont en **%** : ils multiplient la préférence de taille de texte du navigateur au lieu
@@ -251,7 +251,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > préfixe `text-`. Sans ça, `text-control` repasse **couleur** et disparaît du DOM au premier
 > conflit avec `text-foreground`.
 > ```ts
-> import { makeCn } from '@compagnons-ia/ds';
+> import { makeCn } from '@aimotic/ds';
 > export const cn = makeCn(['tab', 'hero']);   // + text-tab, text-hero
 > ```
 > `cn` reste le raccourci quand il n'y a aucun palier à ajouter, et `PALIERS_TYPO` reste exporté
@@ -268,7 +268,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > Tailwind. C'est une précaution pour l'avenir — le jour où un composant du DS écrira une classe
 > Tailwind, l'app devra pointer le paquet :
 > ```css
-> @source "../node_modules/@compagnons-ia/ds/src";
+> @source "../node_modules/@aimotic/ds/src";
 > ```
 
 `tokens/base.css` fournit aussi des classes prêtes à l'emploi : `.display` `.display-xl` `.eyebrow`
@@ -292,12 +292,12 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 Tous sont exportés en nommé depuis la racine, avec leurs types :
 
 ```ts
-import { Button, type ButtonProps } from '@compagnons-ia/ds';
+import { Button, type ButtonProps } from '@aimotic/ds';
 ```
 
 Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
-**En classes, sans composant** (parcours cœur, Compagnons IA) : `.ds-option` (md / sm),
+**En classes, sans composant** (parcours cœur, Aimotic) : `.ds-option` (md / sm),
 `.ds-chip`, `.ds-steps`, `.ds-counter`, `.ds-dot`, `.ds-badge--card`, `.ds-card.is-selected` +
 `.ds-card__flag`, `.ds-portrait` (la vignette d'une personne sans photo). Structure et
 usage : [`docs/PROMPTS.md`](docs/PROMPTS.md) § classes.

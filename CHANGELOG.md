@@ -1,4 +1,4 @@
-# Journal des versions — Compagnons IA
+# Journal des versions — Aimotic
 
 Le journal de CE design system, celui du produit. La numérotation est repartie de `0.1.0`
 au portage : elle ne suit ni celle du gabarit dont le dépôt est né, ni celle d'un autre
@@ -8,6 +8,44 @@ titre — déplacé, pas supprimé.
 La procédure de version est dans [`GOVERNANCE.md`](GOVERNANCE.md), et `node check-version.mjs`
 vérifie que la version de `package.json`, la ligne d'installation du README et le tag git
 concordent. Le tag n'est pas le but : c'est le péage.
+
+---
+
+## 0.8.0 — le produit s'appelle Aimotic
+
+Renommage, décidé par le client. Palette, polices, régime de titrage, rayons, socle et
+composants ne bougent pas : seuls le nom du paquet, le nom du fichier de marque et
+l'identité textuelle changent. C'est quand même une rupture — une app qui monte ce tag sans
+changer ses imports ne compile plus —, donc la mineure monte.
+
+### ⚠ Changé
+
+- **Le paquet s'appelle `@aimotic/ds`.** Tous les imports changent de scope :
+  `@aimotic/ds`, `@aimotic/ds/core.css`, `@aimotic/ds/theme.css`,
+  `@aimotic/ds/app-scale.css`, `@aimotic/ds/brand-content`, `@aimotic/ds/brand-content.css`.
+  Le dépôt s'appelle `Yamiro02/aimotic-design-system`. Aucun alias ne garde l'ancien nom :
+  un import oublié casse à la compilation, il ne dérive pas.
+- **Le fichier de marque s'appelle `brand-aimotic.css`** (`src/styles/brand-aimotic.css`,
+  sous-chemin `@aimotic/ds/brand-aimotic.css`). Contenu identique, valeur pour valeur ;
+  seul son commentaire d'en-tête change.
+- **L'identité par défaut, `src/brand.ts`** : `BRAND_NAME` « Aimotic », `BRAND_MONOGRAM`
+  `A`, `BRAND_WORDMARK_LINES` `["Aimotic"]`. Pour tout composant appelé sans sa prop :
+  `Logo` rend « Aimotic », et sa variante `stacked` tient sur **une ligne**, identique à
+  `wordmark` ; la variante `monogram` et le repli d'`Avatar` affichent `A` ; les libellés
+  accessibles par défaut suivent (`alt` d'`Avatar`, « Aimotic — accueil » sur le lien de
+  `Navbar`). Pas encore de logo dessiné : le mot-marque reste en texte.
+- **`check-dead-utilities` et `check-fragile-classes`**, pointés sur le `src/` d'une app,
+  cherchent le paquet sous `node_modules/@aimotic/ds/`.
+
+### Ce que l'app fait en montant le tag
+
+1. La dépendance devient `"@aimotic/ds": "github:Yamiro02/aimotic-design-system#v0.8.0"`,
+   puis `npm install` : le lock prend la clé `node_modules/@aimotic/ds` et le SHA du tag.
+2. Le scope change dans tous les imports, JS et CSS, et dans la configuration qui nomme le
+   paquet (`resolve.dedupe`, alias, `@source`, commentaires qui citent un chemin du paquet).
+3. `import '@aimotic/ds/brand-aimotic.css'` remplace l'ancien fichier de marque.
+4. Les tests et les textes qui attendaient l'ancien mot-marque, l'ancien monogramme ou un
+   `stacked` sur deux lignes se relisent.
 
 ---
 
@@ -316,9 +354,9 @@ documentation cesse de décrire un gabarit qu'on n'est plus.
   réellement résoluble.
 - `check-catalogue` ne prend plus une section de CLASSE pour un composant fantôme : un
   titre qui commence par un point documente un sélecteur, pas un export.
-- Chemins `@acme` → `@compagnons-ia` dans `check-fragile-classes` et `check-dead-utilities`.
+- Chemins `@acme` → `@aimotic` dans `check-fragile-classes` et `check-dead-utilities`.
 - **`README.md`** : ce n'est plus « un squelette à remplir ». Imports réels
-  (`brand-compagnons-ia.css`), § Polices réécrit (auto-hébergées, aucun appel réseau),
+  (`brand-aimotic.css`), § Polices réécrit (auto-hébergées, aucun appel réseau),
   table des points d'entrée refaite, et un encadré qui lève l'ambiguïté de numérotation
   avec le gabarit.
 - **`src/index.ts`** : l'en-tête annonçait « le TEMPLATE et sa marque d'exemple ».
@@ -410,7 +448,7 @@ d'elle casse le clip en silence — c'est le piège de `docs/PIEGES.md`, et
 
 ---
 
-## 0.1.0 — marque Compagnons IA
+## 0.1.0 — marque Aimotic
 
 Le portage du gabarit : grenat / crème, Nunito Sans auto-hébergée, doctrine arrondie,
 surfaces blanches, `TabBar`, `ChatBubble`, les classes du parcours cœur. Non taguée — les

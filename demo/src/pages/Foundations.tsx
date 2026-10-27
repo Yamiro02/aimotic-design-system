@@ -1,4 +1,4 @@
-import { Card } from '@compagnons-ia/ds';
+import { Card } from '@aimotic/ds';
 import { Block, Grid, Section, Spec, Swatch } from '../ui';
 
 const SURFACES = ['--background', '--foreground', '--card', '--popover', '--secondary', '--muted', '--accent', '--border', '--input'];

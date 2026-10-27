@@ -3,9 +3,9 @@
  * EXTENSION MÉTIER — le pendant JavaScript de `brand-content.css`.
  * OPTIONNELLE. Une app d'interface ne l'importe pas.
  *
- *     import { HaloHot, ContentIcon } from '@compagnons-ia/ds/brand-content';
+ *     import { HaloHot, ContentIcon } from '@aimotic/ds/brand-content';
  *     // et, côté CSS de l'app :
- *     @import "@compagnons-ia/ds/brand-content.css";
+ *     @import "@aimotic/ds/brand-content.css";
  *
  * Rien ici ne sert à faire un écran. Ces deux-là servent à fabriquer un VISUEL :
  * une vignette YouTube, une carte de motion design, un export social. Ils lisent les

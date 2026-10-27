@@ -1,6 +1,6 @@
-import { Avatar, Halo, Logo } from '@compagnons-ia/ds';
+import { Avatar, Halo, Logo } from '@aimotic/ds';
 /* Extension MÉTIER, sous-chemin optionnel — la vitrine la rend, une app d'interface non. */
-import { HaloHot } from '@compagnons-ia/ds/brand-content';
+import { HaloHot } from '@aimotic/ds/brand-content';
 import { IDENTITY } from '../identity';
 import { Block, Grid, Row, Section } from '../ui';
 
@@ -53,7 +53,7 @@ export function BrandPage() {
         </Block>
       </Section>
 
-      <Section title="HaloHot" note="Le halo CHAUD des miniatures — --gradient-thumbnail. EXTENSION MÉTIER : vignettes et cartes motion uniquement, jamais le site, jamais l'UI, jamais les slides. Importé à part, depuis @compagnons-ia/ds/brand-content.">
+      <Section title="HaloHot" note="Le halo CHAUD des miniatures — --gradient-thumbnail. EXTENSION MÉTIER : vignettes et cartes motion uniquement, jamais le site, jamais l'UI, jamais les slides. Importé à part, depuis @aimotic/ds/brand-content.">
         <Block label="Sur --tone-deep" hint="Le seul contexte légitime : une surface d'export. Halo, lui, est le halo d'INTERFACE — plus discret, et dans le point d'entrée principal.">
           <Grid cols={2}>
             <div className="relative overflow-hidden rounded-xl p-space-7" style={{ background: 'var(--tone-deep)' }}>

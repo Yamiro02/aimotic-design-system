@@ -1,9 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   MARQUE — COMPAGNONS IA (nom provisoire)
+   MARQUE — AIMOTIC
    PWA de conversation avec des personas IA · hommes francophones 45-65 ans · mobile 390.
    chaleureux · épuré · rassurant — « à élégance égale, on choisit toujours le plus chaleureux. »
    Copie de brand-example.css, chaque valeur repeinte. Contrat : src/styles/brand.template.css.
-   Vérification :  TOKENS=src/styles/brand-compagnons-ia.css node check-contrast.mjs
+   Vérification :  TOKENS=src/styles/brand-aimotic.css node check-contrast.mjs
                    node check-dark-substitution.mjs · node check-contract.mjs
    ═══════════════════════════════════════════════════════════════════════════════ */
 

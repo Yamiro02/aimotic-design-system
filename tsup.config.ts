@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   /* Deux points d'entrée : le socle, et l'extension métier optionnelle. Séparés pour que
-     `import '@compagnons-ia/ds'` n'embarque ni les tracés de plateforme ni la grille. */
+     `import '@aimotic/ds'` n'embarque ni les tracés de plateforme ni la grille. */
   entry: ['src/index.ts', 'src/brand-content.tsx'],
   format: ['esm', 'cjs'],
   dts: true,

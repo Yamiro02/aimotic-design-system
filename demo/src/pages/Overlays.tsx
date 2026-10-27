@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionSheet, Button, Dropdown, FormField, Icon, Input, Modal } from '@compagnons-ia/ds';
+import { ActionSheet, Button, Dropdown, FormField, Icon, Input, Modal } from '@aimotic/ds';
 import { Block, Row, Section } from '../ui';
 
 const MENU = [

@@ -27,7 +27,7 @@
   --radius-lg:1.25rem;   /* 20 — standard card (default --radius), dropdowns */
   --radius-xl:1.5rem;    /* 24 — large cards, panels, hero */
   --radius-2xl:1.75rem;  /* 28 — modals, sheets */
-  --radius-pill:9999px;  /* badges, compteurs, chips, options — et, en marque Compagnons IA (doctrine arrondie), tout ce qui se presse ou se remplit : boutons, champs, onglets, tab bar */
+  --radius-pill:9999px;  /* badges, compteurs, chips, options — et, en marque Aimotic (doctrine arrondie), tout ce qui se presse ou se remplit : boutons, champs, onglets, tab bar */
   --radius:var(--radius-lg);
 
   /* LES HAUTEURS SONT DES MULTIPLES DE 4, POSÉES — v0.4.0. Une hauteur de composant se

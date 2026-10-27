@@ -1,7 +1,7 @@
 # Accessibilité — le contraste du système, mesuré
 
-> **LES CHIFFRES DE CE DOCUMENT SONT CEUX DE LA MARQUE COMPAGNONS IA**, mesurés sur
-> `src/styles/brand-compagnons-ia.css`. Ils se régénèrent par
+> **LES CHIFFRES DE CE DOCUMENT SONT CEUX DE LA MARQUE AIMOTIC**, mesurés sur
+> `src/styles/brand-aimotic.css`. Ils se régénèrent par
 > `node check-contrast.mjs --table` — les deux tableaux ci-dessous en sortent tels quels.
 > **À refaire à chaque lot qui touche une couleur ou ajoute une paire**, sinon le document
 > décrit une palette qui n'existe plus. Ce qui ne change pas d'une marque à l'autre, c'est
@@ -9,7 +9,7 @@
 
 > **Ce document ne s'écrit pas à la main.** Les deux tableaux sortent de
 > `node check-contrast.mjs --table`, qui lit les valeurs réelles de
-> `src/styles/brand-compagnons-ia.css` — la marque du dépôt. `node check-contrast.mjs` sans argument
+> `src/styles/brand-aimotic.css` — la marque du dépôt. `node check-contrast.mjs` sans argument
 > mesure **toutes** les marques présentes et imprime une ligne par marque. Le même contrôle
 > tourne à chaque `npm run lint` et **fait tomber le build** si une paire passe sous son
 > seuil sans être déclarée.
@@ -132,7 +132,7 @@ Une sortie vide = la règle tient. Aujourd'hui : vide.
 ## 3. Les écarts assumés
 
 6 paires. Chacune est déclarée **dans le fichier de marque**,
-`src/styles/brand-compagnons-ia.css`, par un bloc `@a11y-assume:` — pas dans le script. Le
+`src/styles/brand-aimotic.css`, par un bloc `@a11y-assume:` — pas dans le script. Le
 script porte la mécanique, la marque porte ses renoncements : une autre marque repart d'une
 liste VIDE et n'hérite d'aucune dérogation qu'elle n'a pas prise. Le build tombe si une
 **septième** apparaît, et il tombe AUSSI si l'une des six cesse d'être un écart sans qu'on
@@ -153,7 +153,7 @@ retire sa déclaration.
 vert-cyan d'origine, ses deux arrêts les plus clairs laissaient le label blanc à 3,29 et
 3,81 en thème clair — sous 4,5, et sans bénéfice du seuil « gros texte » (15 px / 600).
 
-**Pourquoi il n'existe plus ici.** Le grenat de Compagnons IA est franchement plus sombre
+**Pourquoi il n'existe plus ici.** Le grenat d'Aimotic est franchement plus sombre
 que le vert-cyan : le label blanc mesure **6,44** en clair et **4,63** en sombre sur le pire
 arrêt (`--brand-from`), **8,01 / 6,51** sur le plus foncé. Rien à assumer, rien à corriger —
 c'est la palette qui a changé, pas la règle.
@@ -225,7 +225,7 @@ Son `@a11y-assume` a été retiré du fichier de marque, à la demande du garde.
 **Ce qu'il faut en retenir.** Quand deux seuils se contredisent sur une même paire, regarder
 la SURFACE avant de bouger la couleur : c'est souvent elle le vrai paramètre.
 
-### 3.5 · Marque Compagnons IA — la bordure sélectionnée : écart FERMÉ
+### 3.5 · Marque Aimotic — la bordure sélectionnée : écart FERMÉ
 
 L'option (`.ds-option`), la chip (`.ds-chip`) et la carte de choix (`.ds-card.is-selected`)
 sélectionnées portent une bordure 1.5px **`--primary`**. Mesure sur `--card` : **6,44** en
@@ -279,7 +279,7 @@ de la mesure faite ici :
     a donc aucune cible voisine à rater — et les quatre onglets occupent chacun un quart de
     la largeur, très au-delà du minimum en largeur. Le jour où la barre cesse de flotter,
     l'item reprend 44 px à l'œil.
-  - **`.ds-chip`** (marque Compagnons IA) se voit à `--chip-h`, `2.5rem` (40 px, v0.4.0).
+  - **`.ds-chip`** (marque Aimotic) se voit à `--chip-h`, `2.5rem` (40 px, v0.4.0).
     Une couche invisible (`::before`) étend sa zone de toucher de `--space-1` en haut et en
     bas : **40 + 4 + 4 = 48 px** au doigt. Condition : l'écart VERTICAL entre deux rangées de
     chips ne descend jamais sous `--space-2` (8 px) — les zones de deux rangées se touchent

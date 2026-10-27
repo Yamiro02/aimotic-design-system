@@ -1,6 +1,6 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
 import { IDENTITY } from '../identity';
-import { Button, Calendar, Checkbox, DatePicker, FormField, Icon, IconButton, Input, Radio, RangeSlider, Select, Switch, Textarea } from '@compagnons-ia/ds';
+import { Button, Calendar, Checkbox, DatePicker, FormField, Icon, IconButton, Input, Radio, RangeSlider, Select, Switch, Textarea } from '@aimotic/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const SERIES = [

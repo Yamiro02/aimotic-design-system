@@ -18,7 +18,7 @@ import { House } from './compat-glyphs';
  * BANNED: `sparkles` — the AI-slop star. Never reintroduce it, in the set or in an app.
  * `youtube` et `instagram` NE SONT PLUS ICI : ce sont des icônes de PLATEFORME, pas
  * d'interface. Elles vivent dans l'extension métier, sur le sous-chemin
- * `@compagnons-ia/ds/brand-content`, sous le composant `ContentIcon`. `github` reste :
+ * `@aimotic/ds/brand-content`, sous le composant `ContentIcon`. `github` reste :
  * c'est une plateforme de développement, présente dans à peu près tout produit technique.
  * Sizes are CSS lengths in rem (1rem / 1.25rem / 1.5rem); the 24x24 viewBox stays unitless.
  * Stroke width: c'est la RÈGLE CSS qui décide — 1.75 partout, 1.5 dans une tuile (badge,

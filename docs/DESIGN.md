@@ -1,8 +1,8 @@
-# Charte — Compagnons IA
+# Charte — Aimotic
 
 ## 1. La marque en cinq lignes ★
 
-**Nom :** Compagnons IA (nom provisoire)
+**Nom :** Aimotic
 **Ce que c'est :** une PWA de conversation avec des personas IA — une app de rencontre sérieuse, chaleureuse, avec une pointe de séduction élégante.
 **Pour qui :** hommes francophones 45-65 ans, plusieurs fois par jour, sur téléphone.
 **Trois adjectifs :** chaleureux · épuré · rassurant — contre kitsch · criard · froid.
@@ -22,7 +22,7 @@
 **Densité :** confortable — texte généreux, contrastes forts, cibles tactiles larges (contrôles à 48, compacts à 40, toujours 44 au doigt pour ce qui conclut un écran — § 5).
 **Écran de référence :** mobile 390 px ; le desktop est secondaire.
 
-## 3. Couleur → `src/styles/brand-compagnons-ia.css` ★
+## 3. Couleur → `src/styles/brand-aimotic.css` ★
 
 ### Surfaces
 
@@ -70,7 +70,7 @@
 
 **Où il n'a jamais le droit :** un fond de page ni un grand aplat de fond d'écran, une bordure de carte au repos.
 
-**Vérification :** `TOKENS=src/styles/brand-compagnons-ia.css node check-contrast.mjs` — les écarts assumés (contours doux) sont déclarés dans le fichier de marque avec leur raison.
+**Vérification :** `TOKENS=src/styles/brand-aimotic.css node check-contrast.mjs` — les écarts assumés (contours doux) sont déclarés dans le fichier de marque avec leur raison.
 
 ## 4. Typographie → fichier de marque
 
@@ -125,7 +125,7 @@ Grotesque humaniste, ronde et chaleureuse → casse d'origine + gras. Une seule 
 
 ## 7. Logo → `src/brand.ts` + `.ds-logo`
 
-À lancer : `npm run rebrand -- "@compagnons-ia/ds" "Compagnons IA"` (monogramme suggéré : `--monogram CI`).
+**Identité :** `src/brand.ts` — nom « Aimotic », monogramme `A`, mot-marque sur une ligne (`["Aimotic"]`). Pas encore de logo dessiné : le mot-marque reste en texte.
 
 **Mark en CSS ou en SVG :** CSS (mot-marque Nunito Sans bold + point carré arrondi en dégradé grenat).
 **La pastille :** le carré en dégradé par défaut.

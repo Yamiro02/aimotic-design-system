@@ -1,4 +1,4 @@
-import { Avatar, Badge, Button, Card, ChatBubble, EmptyState, Icon, IconButton, Input, Pastille, Separator, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@compagnons-ia/ds';
+import { Avatar, Badge, Button, Card, ChatBubble, EmptyState, Icon, IconButton, Input, Pastille, Separator, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@aimotic/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const TONES = ['coral', 'amber', 'danger', 'warning', 'success', 'neutral', 'accent', 'outline'] as const;

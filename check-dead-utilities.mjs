@@ -68,7 +68,7 @@ const EXTENSIONS = /\.(?:tsx?|jsx?|mjs)$/;
 /* Le socle depuis sa racine, ou depuis une app qui l'a installé. */
 const THEME = process.env.THEME || [
   'src/styles/theme.css',
-  'node_modules/@compagnons-ia/ds/src/styles/theme.css',
+  'node_modules/@aimotic/ds/src/styles/theme.css',
 ].find(p => fs.existsSync(p));
 const AMONT = process.env.TAILWIND_THEME || resoudre('tailwindcss/theme.css');
 
