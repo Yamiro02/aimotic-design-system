@@ -301,6 +301,26 @@ svg.lucide{stroke-width:1.75}
    posé par la prop : un select qui a une VRAIE option de valeur vide ne grisonne pas. */
 .ds-select--placeholder select:has(option[value=""]:checked){color:var(--text-muted)}
 .ds-select--placeholder select:has(option[value=""]:checked) option:not([value=""]){color:var(--foreground)}
+/* LES CHAMPS AU TOUCHER — v0.9.0. Safari iOS zoome la page dès qu'on touche un champ dont le
+   texte fait moins de 16 px, et ne dézoome jamais : à --text-control (15), la connexion,
+   l'inscription et les réglages déclenchaient ce zoom, qui suivait ensuite partout.
+   Sur un écran tactile, tout champ où l'on TAPE passe donc à --text-body (16) : l'<input>,
+   le <textarea> (toutes tailles) et le <select> qui portent .ds-input — Input sous toutes
+   ses formes (mot de passe, recherche, unité, icône, action), Textarea, Select.
+   LE JETON N'EST PAS TOUCHÉ, il est REDÉCLARÉ SUR LE CHAMP : --text-control habille aussi les
+   boutons, les options, les chips et la valeur du curseur, qui restent à 15. Le redéclarer
+   plutôt que poser un font-size emmène tout ce qui en découle — le padding du Textarea sm se
+   recalcule et la barre de saisie garde ses 40 sur une ligne ; les champs sur rail gardent
+   leur min-height (40 · 48 · 52).
+   LE DÉCLENCHEUR DU DATEPICKER EST EXCLU, et c'est voulu : il porte .ds-input mais c'est un
+   <button> — on n'y tape rien, Safari n'y zoome pas. Le sélecteur nomme donc les éléments.
+   (pointer: coarse) et pas (any-pointer: coarse) : c'est le pointeur PRINCIPAL qui compte —
+   un portable à écran tactile piloté à la souris garde ses 15, le rendu à la souris ne bouge
+   pas d'un pixel. C'est la requête du variant pointer-coarse: de Tailwind, celle des
+   surcharges locales que l'app retire en montant cette version. */
+@media (pointer:coarse){
+  .ds-input:is(input,textarea,select){--text-control:var(--text-body)}
+}
 .ds-choice{display:inline-flex;align-items:center;gap:0.5625rem;cursor:pointer;font-size:var(--text-body-sm);color:var(--foreground);line-height:var(--leading-snug);position:relative}
 .ds-choice input{position:absolute;opacity:0;width:0;height:0}
 .ds-choice__box{flex:none;display:inline-flex;align-items:center;justify-content:center;width:var(--choice-box);height:var(--choice-box);border:1.5px solid var(--input);background:var(--background);border-radius:var(--choice-box-radius);color:var(--primary-foreground);transition:background var(--duration-fast) var(--ease-standard),border-color var(--duration-fast) var(--ease-standard),box-shadow var(--duration-fast) var(--ease-standard)}
@@ -418,6 +438,24 @@ svg.lucide{stroke-width:1.75}
 .ds-chip.is-selected,.ds-chip[aria-pressed="true"],.ds-chip[aria-checked="true"]{border-color:var(--primary);background:var(--accent);color:var(--primary-readable);font-weight:var(--weight-semibold)}
 .ds-chip:focus-visible,.ds-chip.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-chip:disabled,.ds-chip.is-disabled{opacity:.5;cursor:not-allowed}
+/* LA CHIP GARDE SA LARGEUR — v0.9.0. Choisie, elle passe de --weight-medium à
+   --weight-semibold : son libellé change de largeur, d'une fraction de pixel à 1,5 px. En bout
+   de ligne, ça suffit à l'envoyer à la ligne suivante sous le doigt, et toute la grille bouge
+   (la puce « City-break »).
+   La parade : data-label = le libellé. Une COPIE INVISIBLE (::after, le ::before porte déjà
+   la zone de toucher) se pose sous le texte, à hauteur nulle, dans l'AUTRE graisse que celle
+   du texte visible — semi-gras au repos, medium une fois choisie. La chip prend donc toujours
+   la largeur de la plus large des deux graisses : rien ne bouge entre repos, survol, focus et
+   sélection. Les deux, pas seulement le semi-gras : mesuré, le semi-gras est PLUS ÉTROIT pour
+   certains libellés (« Jazz », « Voyages ») — réserver le seul semi-gras les ferait rétrécir.
+   Le prix : une chip au repos s'élargit de l'écart entre ses deux graisses (0 à 1,5 px
+   mesurés sur la vitrine). visibility:hidden retire la copie de l'arbre d'accessibilité : le
+   libellé n'est lu qu'une fois. Sans data-label, la chip rend exactement comme avant.
+   RÉSERVÉ À UNE CHIP DONT LE CONTENU EST SON SEUL LIBELLÉ : la colonne qui superpose texte et
+   copie empilerait une icône. */
+.ds-chip[data-label]{flex-direction:column;justify-content:center}
+.ds-chip[data-label]::after{content:attr(data-label);height:0;overflow:hidden;visibility:hidden;font-weight:var(--weight-semibold)}
+.ds-chip[data-label]:is(.is-selected,[aria-pressed="true"],[aria-checked="true"])::after{font-weight:var(--weight-medium)}
 /* La PROGRESSION PAR ÉTAPES — un libellé (« Étape 2 sur 5 ») et une rangée de points.
    Le libellé PORTE l'information, les points ne sont qu'un renfort : ils peuvent être
    aria-hidden. Étape courante = capsule allongée en dégradé ; étapes faites = dégradé

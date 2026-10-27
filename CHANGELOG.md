@@ -11,6 +11,72 @@ concordent. Le tag n'est pas le but : c'est le péage.
 
 ---
 
+## 0.9.0 — au doigt, rien ne bouge
+
+Deux reliquats du lot L-004, vus sur iPhone. Aucune rupture : aucune API ne change, le
+rendu à la souris des champs est identique au pixel, et une chip sans `data-label` rend
+exactement comme avant. Un changement de rendu au toucher, voulu, signalé ⚠.
+
+### ⚠ Changé
+
+- **Sur écran tactile, les champs où l'on tape passent à 16 px** (`--text-body`) au lieu de
+  15 (`--text-control`). Safari iOS zoomait la page dès qu'on touchait un champ sous 16 px
+  et ne dézoomait jamais : connexion, inscription, réglages. La règle,
+  `@media (pointer:coarse)`, redéclare `--text-control` **sur le champ** —
+  `.ds-input:is(input,textarea,select)` — sans toucher au jeton : boutons, options, chips,
+  onglets et valeur du curseur restent à 15. Couverts : `Input` sous toutes ses formes
+  (`sm` · `md` · `lg`, mot de passe et son œil, recherche avec icône et croix, unité),
+  `Textarea` (`md`, `sm`, `autoResize`), `Select`, et tout `<input>`, `<textarea>` ou
+  `<select>` qui porte `.ds-input` à la main.
+  - **Hauteurs inchangées** sur le rail : 40 · 48 · 52. Le padding du `Textarea sm` se
+    recalcule depuis le jeton redéclaré (7,25 → 6,5 px) : la barre de saisie garde ses 40
+    sur une ligne.
+  - **Ce qui grandit, au toucher seulement** : un `Textarea` multiligne prend 1,5 px par
+    ligne (interligne 22,5 → 24) — un `md` de 4 lignes passe de 115 à 121 ; un `Select` à
+    largeur intrinsèque (posé dans une rangée flex) s'élargit avec son texte.
+  - **Exclu, et c'est voulu** : le déclencheur de `DatePicker`, un `<button>` qui porte
+    `.ds-input` — on n'y tape rien, Safari n'y zoome pas.
+  - `(pointer: coarse)`, le pointeur PRINCIPAL : un portable tactile piloté à la souris
+    garde ses 15. C'est la requête du variant `pointer-coarse:` de Tailwind.
+  - Vérifié sur le simulateur iOS (Safari, iPhone 17e, 390 points) : toucher un champ ne
+    zoome plus la page. À la souris, 61 champs de la vitrine mesurés identiques à la
+    v0.8.0 (position, taille, police), captures des sections Input, Textarea et Select
+    identiques octet pour octet, en clair et en sombre.
+
+### Ajouté
+
+- **`.ds-chip[data-label]` — la chip garde sa largeur.** Choisie, elle passe de
+  `--weight-medium` à `--weight-semibold` et son libellé change de largeur ; en bout de
+  ligne, elle partait à la ligne suivante (la puce « City-break »). Avec
+  `data-label` = son libellé, une copie invisible (`::after`, hauteur nulle,
+  `visibility:hidden`) se pose sous le texte dans l'AUTRE graisse : la chip prend toujours
+  la largeur de la plus large des deux. Les deux graisses et pas le seul semi-gras :
+  mesuré, le semi-gras est plus étroit pour certains libellés (« Jazz » −0,24 px,
+  « Voyages » −0,36 px). Largeur identique au repos, au survol, au focus et choisie (écart
+  mesuré : 0). Le prix : une chip au repos s'élargit de 0 à 1,42 px (« City-break »
+  +0,67). La copie n'est pas lue (arbre d'accessibilité vérifié : « City-break », une fois).
+  Réservé à une chip dont le contenu est son seul libellé : texte et copie s'empilent en
+  colonne, une icône s'y empilerait aussi.
+- Vitrine : les chips portent `data-label`, et un spécimen « En bout de ligne » — une
+  rangée taillée à sa largeur exacte, où choisir « City-break » ne déplace plus rien.
+
+### Ce que l'app fait en montant le tag
+
+1. La dépendance devient `"@aimotic/ds": "github:Yamiro02/aimotic-design-system#v0.9.0"`,
+   puis `npm install` (le lock prend le SHA du tag).
+2. Les deux surcharges locales du zoom disparaissent : dans `ChatComposer.tsx`, la classe
+   `pointer-coarse:[--text-control:var(--text-body)]` du `Textarea` (et le commentaire qui
+   l'explique) ; dans `ConversationSearch.tsx`, la même classe sur l'`Input` — la classe
+   voisine `[&::-webkit-search-cancel-button]:appearance-none` reste.
+3. Chaque chip à bascule ou radio dont le contenu est son seul libellé prend
+   `data-label={libellé}`, la chaîne exacte affichée (emoji compris s'il y en a un) ; le
+   composant `ChipLabel` de `ChipGroup.tsx` (copie invisible en semi-gras) est retiré et le
+   libellé redevient le seul enfant du bouton. Les chips qui ne changent jamais d'état (une
+   chip d'affichage `.is-selected`, un bouton d'action avec icône, une suggestion sur
+   plusieurs lignes) n'en ont pas besoin.
+
+---
+
 ## 0.8.0 — le produit s'appelle Aimotic
 
 Renommage, décidé par le client. Palette, polices, régime de titrage, rayons, socle et

@@ -772,6 +772,13 @@ mise en page, le champ est `--card` ; dans une porteuse blanche, il repasse en
   de mise en page — une largeur se pose sur un conteneur autour de l'`Input`.
 - **Hauteurs** (v0.4.0) : `md` **48** — le champ d'un formulaire ; `sm` **40** — la barre de
   recherche, la barre de saisie du chat ; `lg` **52**, site vitrine uniquement.
+- **Au toucher, 16 px** (v0.9.0) : sur un écran tactile (`pointer: coarse`), le texte saisi
+  passe de `--text-control` (15) à `--text-body` (16) — sous 16 px, Safari iOS zoome la page
+  au toucher du champ et ne dézoome plus. Rien à écrire côté app : la règle redéclare
+  `--text-control` sur l'`<input>`, le `<textarea>` et le `<select>` qui portent `.ds-input`.
+  Hauteur inchangée, rendu à la souris inchangé. **Ne surchargez plus la taille du texte
+  d'un champ** (l'ancien contournement `pointer-coarse:[--text-control:var(--text-body)]`
+  est à retirer) ; et un champ écrit hors du DS doit tenir 16 px au toucher lui aussi.
 - Props : `size` (`sm·md·lg`) · `invalid` · `icon` · `surface` (`auto` défaut = la déduction de
   `patterns.css` décide · `card` force le crème `--background` hors d'une vraie Card ·
   `page` force le blanc `--card` là où la déduction aurait mis du crème — un îlot crème
@@ -877,6 +884,9 @@ Button md. `forwardRef` sur le `<select>` natif.
   valait 48. Trois `Select` côte à côte sur 390 px (grille 1 / 1.5 / 1.2) mesurent 92 /
   139 / 111 px : « Jour », « septembre » et « Année » tiennent — à 48, les trois étaient
   coupés.
+- **Au toucher, 16 px** (v0.9.0), comme l'`Input`. La date en trois colonnes tient encore à
+  390 px, de justesse : « septembre » mesure 76,6 px à 16 px pour 78 px utiles dans la
+  colonne de 139. Plus étroit que 390, la colonne du mois coupe — déjà vrai à 15 px.
 - États rendus : repos, focus, invalide, désactivé — sur les deux surfaces.
 
 ## Switch
@@ -926,6 +936,9 @@ l'Input. `forwardRef` sur le `<textarea>` natif — la ref reste branchée avec 
   envoi revient à une ligne) et quand la largeur change. La poignée est retirée.
 - **`maxRows`** : le plafond. Sans lui, le champ grandit sans limite — pour une barre de
   chat, posez-en un (5).
+- **Au toucher, 16 px** (v0.9.0), comme l'`Input`. Le padding du `sm` se recalcule depuis
+  la taille : la barre garde ses 40 sur une ligne. Un champ multiligne prend 1,5 px par
+  ligne (interligne 24 au lieu de 22,5).
 - **Le bouton d'envoi suit la barre** : `IconButton size="sm"` (40), dans un conteneur
   `items-end` — aligné sur une ligne, et au niveau de la dernière ligne quand le champ
   grandit. « Envoyer » au pied d'un formulaire, lui, reste un `Button` md (48).
@@ -1296,7 +1309,7 @@ que l'aide de spécimen. Sélectionnée : plaque `--accent`, bordure `--primary`
 
 ```tsx
 <div role="group" aria-label="Tes centres d'intérêt" className="flex flex-wrap gap-space-2">
-  <button type="button" className="ds-chip" aria-pressed={choisi} onClick={basculer}>Cuisine</button>
+  <button type="button" className="ds-chip" data-label="Cuisine" aria-pressed={choisi} onClick={basculer}>Cuisine</button>
 </div>
 ```
 
@@ -1312,7 +1325,7 @@ que l'aide de spécimen. Sélectionnée : plaque `--accent`, bordure `--primary`
 ```tsx
 <div role="radiogroup" aria-label="Ton rythme de conversation" className="flex flex-wrap gap-space-2">
   {RYTHMES.map((r, i) => (
-    <button key={r} type="button" role="radio" className="ds-chip"
+    <button key={r} type="button" role="radio" className="ds-chip" data-label={r}
       aria-checked={choix === r} tabIndex={r === arret ? 0 : -1}
       onClick={() => setChoix(r)} onKeyDown={e => auClavier(e, i)}>{r}</button>
   ))}
@@ -1336,10 +1349,20 @@ simuler un choix unique avec des `aria-pressed` qui s'éteignent entre eux : le 
 d'écran annonce des bascules indépendantes, et l'exclusivité n'est dite nulle part.
 - **Libellé d'INTERFACE : jamais d'emoji.** Celui qui en porte est `.ds-badge--card`, qui
   est du contenu.
+- **Largeur stable : `data-label` = le libellé** (v0.9.0). Choisie, une chip passe en
+  semi-gras et son libellé change de largeur : en bout de ligne, elle part à la ligne
+  suivante et la grille bouge. Avec `data-label`, elle réserve dès le repos la largeur de
+  son libellé dans la plus large de ses deux graisses (une copie invisible, `::after`,
+  jamais lue) : sa largeur ne bouge plus entre repos, survol, focus et sélection. Toute
+  chip à bascule ou radio le porte, avec la **chaîne exacte affichée** — sinon la réserve
+  est fausse. Le contenu de la chip doit être ce libellé SEUL, sans icône ni balisage : la
+  copie se superpose en colonne. Pas besoin de copie invisible écrite par l'app (l'ancien
+  `ChipLabel`) : c'est ce que fait le socle. Une chip sans `data-label` rend comme avant —
+  au repos, la réserve l'élargit de 0 à 1,5 px.
 - **Hauteur et cible tactile** : 40 à l'œil (`--chip-h`, la taille `--control-sm`, v0.4.0),
   texte `--text-control` (15) ; 48 au doigt par une couche `::before` invisible.
   Condition : au moins `--space-2` entre deux rangées. Voir `docs/accessibilite.md` § 4.
-- Vitrine : Formulaires § Chip — bascule, radio (clair + sombre), états.
+- Vitrine : Formulaires § Chip — bascule, radio (clair + sombre), états, en bout de ligne.
 
 ## .ds-steps
 

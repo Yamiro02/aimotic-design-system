@@ -61,7 +61,7 @@ marque devrait remplir reste lisible dans `src/styles/brand.template.css`.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/aimotic-design-system#v0.8.0
+npm i github:Yamiro02/aimotic-design-system#v0.9.0
 ```
 
 > **Une seule numérotation fait foi ici : celle de ce dépôt.** Elle est repartie de `0.1.0`

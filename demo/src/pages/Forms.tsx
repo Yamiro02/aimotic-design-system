@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { IDENTITY } from '../identity';
 import { Button, Calendar, Checkbox, DatePicker, FormField, Icon, IconButton, Input, Radio, RangeSlider, Select, Switch, Textarea } from '@aimotic/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
@@ -63,11 +63,46 @@ function ChipsRadio({ label }: { label: string }) {
           aria-checked={choix === r}
           tabIndex={r === arret ? 0 : -1}
           className="ds-chip"
+          data-label={r}
           onClick={() => setChoix(r)}
           onKeyDown={e => auClavier(e, i)}
         >
           {r}
         </button>
+      ))}
+    </div>
+  );
+}
+
+/* .ds-chip EN BOUT DE LIGNE — le cas de la puce « City-break ». Le conteneur est taillé, une
+   fois les polices chargées, à la largeur EXACTE de sa rangée, chips au repos : la dernière
+   touche le bord. Sans réserve, la choisir la passait en semi-gras, l'élargissait d'une
+   fraction de pixel et l'envoyait à la ligne ; avec data-label, sa largeur ne bouge plus. */
+const VOYAGES = ['Mer', 'Lac', 'City-break'];
+function ChipsBoutDeLigne() {
+  const rangee = useRef<HTMLDivElement | null>(null);
+  const [largeur, setLargeur] = useState<number>();
+  const [choix, setChoix] = useState<string[]>([]);
+  useEffect(() => {
+    let vivant = true;
+    void document.fonts.ready.then(() => {
+      const el = rangee.current;
+      if (!vivant || !el) return;
+      /* La somme des largeurs, pas l'écart entre deux bords : juste même si la rangée est
+         déjà repliée. Arrondie au 1/64 de pixel supérieur, l'unité de mise en page des
+         navigateurs : moins d'un 1/64 de jeu, la rangée tient tout juste. */
+      const chips = [...el.children];
+      const ecart = parseFloat(getComputedStyle(el).columnGap) || 0;
+      const somme = chips.reduce((s, c) => s + c.getBoundingClientRect().width, 0) + ecart * (chips.length - 1);
+      setLargeur(Math.ceil(somme * 64) / 64);
+    });
+    return () => { vivant = false; };
+  }, []);
+  return (
+    <div ref={rangee} className="flex flex-wrap gap-space-2" style={{ width: largeur ?? 'max-content' }}>
+      {VOYAGES.map(v => (
+        <button key={v} type="button" className="ds-chip" data-label={v} aria-pressed={choix.includes(v)}
+          onClick={() => setChoix(c => (c.includes(v) ? c.filter(x => x !== v) : [...c, v]))}>{v}</button>
       ))}
     </div>
   );
@@ -219,7 +254,7 @@ export function FormsPage() {
 
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Input" note="Hauteur posée (min-height + padding-block:0) : md 48 pour un champ de formulaire, sm 40 pour une barre de recherche ou de saisie. Bordure 1.5px. Le focus se lit sur la bordure seule, qui passe en --ring — jamais d'anneau en plus. PILL et BLANC : doctrine arrondie + « le blanc est la surface portée ».">
+      <Section title="Input" note="Hauteur posée (min-height + padding-block:0) : md 48 pour un champ de formulaire, sm 40 pour une barre de recherche ou de saisie. Bordure 1.5px. Le focus se lit sur la bordure seule, qui passe en --ring — jamais d'anneau en plus. PILL et BLANC : doctrine arrondie + « le blanc est la surface portée ». Sur écran tactile (pointer: coarse), le texte saisi passe à 16 (--text-body) : sous 16 px, Safari iOS zoome la page au toucher du champ. La hauteur ne bouge pas, et rien ne change à la souris.">
         <Block label="Tailles">
           <Stack>
             <Input size="sm" placeholder="Petite — 40, barre de recherche" />
@@ -279,7 +314,7 @@ export function FormsPage() {
         </Block>
       </Section>
 
-      <Section title="Textarea" note="Hauteur portée par rows — jamais de min-height. Redimensionnement vertical uniquement, sauf avec autoResize. Même règle de surface que l'Input. md par défaut ; sm = 40 sur une ligne.">
+      <Section title="Textarea" note="Hauteur portée par rows — jamais de min-height. Redimensionnement vertical uniquement, sauf avec autoResize. Même règle de surface que l'Input. md par défaut ; sm = 40 sur une ligne. Sur écran tactile, le texte passe à 16 comme l'Input — sm garde 40 sur une ligne.">
         <Block label="Repos, focus, erreur, désactivé">
           <Stack>
             <Textarea rows={3} placeholder="Décris ton idée d'app en deux phrases." />
@@ -302,7 +337,7 @@ export function FormsPage() {
         </Block>
       </Section>
 
-      <Section title="Select" note="Select natif sur le rail 48, avec un chevron Lucide. placeholder pose une invite (« Jour ») en --text-muted tant que rien n'est choisi.">
+      <Section title="Select" note="Select natif sur le rail 48, avec un chevron Lucide. placeholder pose une invite (« Jour ») en --text-muted tant que rien n'est choisi. Sur écran tactile, le texte passe à 16 comme l'Input.">
         <Block label="Repos, focus, erreur, désactivé">
           <Stack>
             <Select options={SERIES} defaultValue="build" />
@@ -426,11 +461,11 @@ export function FormsPage() {
         </Block>
       </Section>
 
-      <Section title="Chip" note="Parcours cœur. Deux modes, un seul rendu : BASCULE (aria-pressed, choix multiples) ou RADIO (role=radio + aria-checked dans un role=radiogroup, choix unique). Hauteur --chip-h : 40 à l'œil (la taille --control-sm), texte 15, 48 au doigt (zone de toucher ::before de --space-1 en haut et en bas ; au moins --space-2 entre deux rangées). Sélectionnée : plaque --accent, bordure --primary, libellé --primary-readable semibold. Libellé d'INTERFACE : jamais d'emoji — c'est le badge carte (Data display) qui en porte. Classe seule, pas de composant.">
+      <Section title="Chip" note="Parcours cœur. Deux modes, un seul rendu : BASCULE (aria-pressed, choix multiples) ou RADIO (role=radio + aria-checked dans un role=radiogroup, choix unique). Hauteur --chip-h : 40 à l'œil (la taille --control-sm), texte 15, 48 au doigt (zone de toucher ::before de --space-1 en haut et en bas ; au moins --space-2 entre deux rangées). Sélectionnée : plaque --accent, bordure --primary, libellé --primary-readable semibold. Libellé d'INTERFACE : jamais d'emoji — c'est le badge carte (Data display) qui en porte. data-label = le libellé (v0.9.0) : la chip réserve la largeur de son libellé dans ses deux graisses, elle ne bouge plus quand on la choisit. Classe seule, pas de composant.">
         <Block label="Bascule — choix multiples" hint="Tes centres d'intérêt — clique pour basculer. aria-pressed, une tabulation par chip, Espace ou Entrée bascule.">
           <div className="flex flex-wrap items-center gap-space-2 rounded-xl bg-background p-space-4">
             {INTERETS.map(i => (
-              <button key={i} type="button" className="ds-chip" aria-pressed={interets.includes(i)} onClick={() => setInterets(basculer(interets, i))}>{i}</button>
+              <button key={i} type="button" className="ds-chip" data-label={i} aria-pressed={interets.includes(i)} onClick={() => setInterets(basculer(interets, i))}>{i}</button>
             ))}
           </div>
         </Block>
@@ -448,11 +483,16 @@ export function FormsPage() {
         </Block>
         <Block label="États">
           <div className="flex flex-wrap items-center gap-space-2 rounded-xl bg-background p-space-4">
-            <button type="button" className="ds-chip">Repos</button>
-            <button type="button" className="ds-chip is-hover">Survol</button>
-            <button type="button" className="ds-chip is-selected">Sélectionnée</button>
-            <button type="button" className="ds-chip is-focus">Focus</button>
-            <button type="button" className="ds-chip" disabled>Indisponible</button>
+            <button type="button" className="ds-chip" data-label="Repos">Repos</button>
+            <button type="button" className="ds-chip is-hover" data-label="Survol">Survol</button>
+            <button type="button" className="ds-chip is-selected" data-label="Sélectionnée">Sélectionnée</button>
+            <button type="button" className="ds-chip is-focus" data-label="Focus">Focus</button>
+            <button type="button" className="ds-chip" data-label="Indisponible" disabled>Indisponible</button>
+          </div>
+        </Block>
+        <Block label="En bout de ligne — la largeur ne bouge pas" hint="data-label (v0.9.0) : la chip réserve dès le repos la largeur de son libellé dans la plus large de ses deux graisses, par une copie invisible (::after, visibility:hidden — jamais lue). Ici le conteneur est taillé à la largeur exacte de la rangée : choisis puis retire « City-break », rien ne bouge. Sans data-label, elle s'élargissait d'une fraction de pixel et partait à la ligne.">
+          <div className="rounded-xl bg-background p-space-4">
+            <ChipsBoutDeLigne />
           </div>
         </Block>
       </Section>

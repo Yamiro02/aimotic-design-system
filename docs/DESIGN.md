@@ -84,6 +84,8 @@
 
 Grotesque humaniste, ronde et chaleureuse → casse d'origine + gras. Une seule famille display/body : l'épure passe par la hiérarchie de graisse, pas par un contraste de faces.
 
+**Le texte saisi dans un champ :** `--text-control` (15) à la souris, `--text-body` (16) sur un écran tactile (`pointer: coarse`) — sous 16 px, Safari iOS zoome la page au toucher du champ. La règle est portée par les champs (`patterns.css`), pas par le jeton : boutons, options et chips restent à 15.
+
 **Graisses chargées :** Nunito Sans 400 · 500 · 600 · 700, DM Mono 400 — rien d'autre. **Auto-hébergées** : les `.woff2` sont dans `src/styles/assets/fonts/` et les `@font-face` en tête du fichier de marque. Aucun appel réseau à Google Fonts.
 
 ## 5. Espacement, rayons, rail
@@ -214,3 +216,5 @@ Grotesque humaniste, ronde et chaleureuse → casse d'origine + gras. Une seule 
 | 2026-10-01 | `heart` au catalogue (51 glyphes) | « Mes préférences de rencontre », hub des réglages |
 | 2026-10-01 | `RangeSlider onChangeEnd` : appelé une fois la fin de l'interaction (pointeur relâché, touche relâchée, focus perdu), jamais sans changement | enregistrer une préférence sans appeler le serveur à chaque cran ; une flèche maintenue = un appel |
 | 2026-10-01 | Pas d'anneau sur un titre ou une zone de contenu en `tabindex="-1"` sans `role` (`base.css`) | le focus y est posé par programme pour l'annonce d'un changement d'étape ; 2.4.7 ne vise que ce qui s'utilise au clavier. Portée étroite : les widgets à tabindex itinérant gardent leur anneau |
+| 2026-10-27 | Champs à 16 px sur écran tactile (`pointer: coarse`) : `--text-control` redéclaré sur l'`<input>`, le `<textarea>` et le `<select>` qui portent `.ds-input` ; le déclencheur de `DatePicker` (un `<button>`) est exclu | Safari iOS zoomait au toucher de tout champ sous 16 px et ne dézoomait plus (connexion, inscription, réglages — lot L-004). Le jeton ne bouge pas : il habille aussi boutons, options et chips. Pointeur PRINCIPAL et non `any-pointer` : à la souris, rendu identique au pixel. Hauteurs du rail inchangées ; un champ multiligne prend 1,5 px par ligne au toucher |
+| 2026-10-27 | `.ds-chip[data-label]` : la chip réserve la largeur de son libellé dans la plus large de ses deux graisses (copie `::after` invisible, dans l'autre graisse que le texte) | choisie, elle passait en semi-gras, s'élargissait d'une fraction de pixel et partait à la ligne en bout de rangée (puce « City-break », lot L-004). Les deux graisses et pas le seul semi-gras : mesuré, le semi-gras est plus étroit pour « Jazz » et « Voyages ». Prix : 0 à 1,5 px de plus au repos. Attribut opt-in : une chip sans lui rend comme avant |
