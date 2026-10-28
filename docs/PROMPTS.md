@@ -1258,12 +1258,24 @@ d'actions (c'est `Dropdown` / `ActionSheet`).
 />
 <Modal inline phase="result" onClose={() => setOpen(false)}
   result={{ status: 'success', title: 'Build supprimé', message: 'Les fichiers ont été retirés.' }} />
+<Modal open={open} onClose={() => setOpen(false)} aria-label="Aperçu de la vidéo">
+  {/* contenu qui porte son propre en-tête : pas de `title` visible */}
+</Modal>
 ```
 
 - Props : `open` · `icon` + `iconVariant` (`danger·brand·neutral·warning·success` — la
   tuile est une `Pastille dialogue`) · `title` / `description` / `children` · `footer` ·
   `onClose` · `closeButton` · `dismissable` · `phase` (`confirm·loading·result`) ·
-  `result` (`{status, title?, message?, onRetry?}`) · `inline` (spécimen sans voile).
+  `result` (`{status, title?, message?, onRetry?}`) · `inline` (spécimen sans voile) ·
+  `aria-label` (nom d'une fenêtre sans titre visible, v0.11.0).
+- **Nom accessible — toujours, dans toutes les phases** (v0.11.0). La fenêtre est un
+  `role="dialog"`, et un dialogue sans nom est muet pour le lecteur d'écran. C'est le titre
+  VISIBLE de la phase en cours qui la nomme (`aria-labelledby`), chaîne ou nœud : `title` en
+  confirm et loading, `result.title` en result — `title` n'y est plus affiché, il ne la
+  nomme plus. **Sans titre visible** — un contenu qui porte son propre en-tête, un résultat
+  sans `result.title` —, passe `aria-label` : aucun effet à l'écran. Ni l'un ni l'autre :
+  repli sur « Fenêtre », qui ne dit pas ce que la fenêtre demande, et avertissement en
+  développement. Avec un titre visible, `aria-label` est ignoré.
 - **La croix et les gestes de fuite sont découplés** (v0.3.0) : `closeButton={false}`
   retire la croix en gardant Échap et le clic-voile ; `dismissable={false}` fait
   l'inverse — la croix devient le seul geste de fermeture, pour une modale à saisie
@@ -1271,7 +1283,8 @@ d'actions (c'est `Dropdown` / `ActionSheet`).
 - Un champ dans une modale : voir le spécimen « Avec un champ contrôlé » de la vitrine —
   le piège de focus tient la frappe.
 - États rendus : les trois phases, avec et sans icône, succès et erreur, feuille basse
-  sous 64rem.
+  sous 64rem, titre en nœud, sans titre visible (fenêtre et résultat nommés par
+  `aria-label`).
 
 ---
 

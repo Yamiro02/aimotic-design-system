@@ -140,6 +140,21 @@ export function OverlaysPage() {
             </FormField>
           </Modal>
         </Block>
+
+        <Block label="Nom accessible" hint="Le titre VISIBLE de la phase en cours nomme la fenêtre (aria-labelledby), chaîne ou nœud : title en confirm et loading, result.title en result. Sans titre visible, aria-label donne le nom — aucun effet à l'écran. Ni l'un ni l'autre : repli « Fenêtre » et avertissement en console en développement.">
+          <div className="flex flex-wrap gap-space-5">
+            <Modal inline iconVariant="brand" icon={<Icon name="rocket" />}
+              title={<>Lancer le <span className="accent">build</span> ?</>}
+              description="Un titre en nœud nomme la fenêtre tel qu'il s'affiche."
+              footer={<><Button variant="ghost" size="sm">Plus tard</Button><Button size="sm">Lancer</Button></>} />
+            <Modal inline onClose={() => undefined} aria-label="Aperçu de la vidéo"
+              iconVariant="neutral" icon={<Icon name="video" />}
+              description="Pas de titre visible : le contenu porte son propre en-tête, aria-label nomme la fenêtre."
+              footer={<Button variant="secondary" size="sm">Fermer</Button>} />
+            <Modal inline phase="result" onClose={() => undefined} aria-label="Lien copié"
+              result={{ status: 'success', message: 'Le lien est dans ton presse-papiers.' }} />
+          </div>
+        </Block>
       </Section>
 
       <Section title="ActionSheet" note="Le menu ⋯ sur mobile : une feuille basse d'actions, Annuler intégré. Chaque ligne fait au moins --control-md — le rail tactile, non négociable.">

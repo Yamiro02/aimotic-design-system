@@ -1,9 +1,15 @@
+import { useEffect, useId } from 'react';
 import type { JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../icons/Icon';
 import { Pastille } from '../data-display/Pastille';
 import { Button } from '../actions/Button';
 import { useModalSurface } from './useModalSurface';
+
+/* Remplacé par le bundler de l'app (Vite, webpack…), donc le bloc disparaît en
+   production. `declare` local plutôt qu'une dépendance @types/node ajoutée au paquet —
+   même parade que dans ActionSheet. */
+declare const process: { env: { NODE_ENV?: string } };
 
 /**
  * Dialog on --popover, radius 2xl, --shadow-lg, over a 45% ink scrim with blur(2px).
@@ -14,9 +20,17 @@ import { useModalSurface } from './useModalSurface';
  * MODAL SURFACE — focus moved in on open, focus trapped, Escape closes, focus restored to the
  * opener on close (hook `useModalSurface`, shared with ActionSheet). phase="loading" keeps the
  * trap and kills Escape, the scrim click and the close button.
+ *
+ * NOM ACCESSIBLE — v0.11.0. Un role="dialog" doit avoir un nom, dans TOUTES ses phases. C'est
+ * le titre visible de la phase en cours qui le nomme (`aria-labelledby`), chaîne ou nœud :
+ * `title` en confirm et loading, `result.title` en result. Sans titre visible — un contenu qui
+ * porte son propre en-tête, un résultat sans titre —, `aria-label` donne le nom sans rien
+ * changer à l'écran. Ni l'un ni l'autre : repli sur « Fenêtre » et avertissement en
+ * développement, comme ActionSheet et Dropdown.
  */
 export interface ModalResult {
   status: 'success' | 'error';
+  /** Visible heading of the result. When present it NAMES the dialog in phase="result". */
   title?: ReactNode;
   /** Comes from the caller — design for one to three lines, not a single word. */
   message?: ReactNode;
@@ -30,6 +44,10 @@ export interface ModalProps {
   icon?: ReactNode;
   /** Tile tint: danger (default) · brand · neutral · warning · success. */
   iconVariant?: 'danger' | 'brand' | 'neutral' | 'warning' | 'success';
+  /**
+   * Visible heading of the confirm and loading phases. When present it NAMES the dialog
+   * (`aria-labelledby`) — `aria-label` is then ignored. Not rendered in phase="result".
+   */
   title?: ReactNode;
   description?: ReactNode;
   footer?: ReactNode;
@@ -51,6 +69,13 @@ export interface ModalProps {
   result?: ModalResult;
   /** Render the panel without the fixed scrim — for specimen cards. */
   inline?: boolean;
+  /**
+   * Nom accessible d'une fenêtre SANS titre visible (v0.11.0) — aucun effet à l'écran. Même
+   * prop qu'`ActionSheet` et `Dropdown`. Sert quand la phase en cours n'affiche aucun titre :
+   * pas de `title` en confirm ou loading, pas de `result.title` en result. Ignoré dès qu'un
+   * titre visible est là : c'est lui qui nomme la fenêtre.
+   */
+  'aria-label'?: string;
   className?: string;
   children?: ReactNode;
 }
@@ -63,7 +88,7 @@ const TILE_TONE: Record<string, TileTone> = {
 export function Modal({
   open = true, icon, iconVariant = 'danger', title, description, footer,
   onClose, closeButton = true, dismissable = true, inline = false,
-  phase = 'confirm', result, className = '', children,
+  phase = 'confirm', result, 'aria-label': ariaLabel, className = '', children,
 }: ModalProps): JSX.Element | null {
   const locked = phase === 'loading';
   /* initialFocus 'container' : le panneau porte role="dialog", aria-modal et un nom accessible,
@@ -75,11 +100,29 @@ export function Modal({
   const panelRef = useModalSurface({
     open, locked, onClose: dismissable ? onClose : undefined, inline, initialFocus: 'container',
   });
-
-  if (!open) return null;
+  const titleId = useId();
 
   const isResult = phase === 'result';
   const r = result ?? ({} as ModalResult);
+  /* Le titre VISIBLE de la phase en cours : en result, `title` n'est pas rendu — l'annoncer
+     nommerait la fenêtre « Supprimer ce build ? » pendant qu'elle affiche « Build supprimé ». */
+  const aTitre = Boolean(isResult ? r.title : title);
+
+  /* Filet de développement. Le repli « Fenêtre » donne un nom, pas le BON : il ne dit pas ce
+     que la fenêtre demande. Seul le « présent ou non » du titre compte ici — un nœud change
+     d'identité à chaque rendu. */
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    if (!open || aTitre || ariaLabel) return;
+    console.warn(
+      `[ds] Modal sans titre visible ni \`aria-label\` (phase ${phase}) : le lecteur d'écran annonce `
+      + '« Fenêtre », qui ne dit pas ce que la fenêtre demande. Sans `title` — ou en phase result '
+      + 'sans `result.title` —, passe `aria-label`.',
+    );
+  }, [open, aTitre, ariaLabel, phase]);
+
+  if (!open) return null;
+
   const resultTone: TileTone = r.status === 'error' ? 'danger' : 'success';
 
   const closeBtn = onClose && closeButton ? (
@@ -101,7 +144,8 @@ export function Modal({
       role="dialog"
       aria-modal="true"
       aria-busy={locked || undefined}
-      aria-label={typeof title === 'string' ? title : undefined}
+      aria-labelledby={aTitre ? titleId : undefined}
+      aria-label={aTitre ? undefined : (ariaLabel ?? 'Fenêtre')}
     >
       <span className="ds-grip" aria-hidden="true" />
       {isResult ? (
@@ -113,7 +157,7 @@ export function Modal({
                   (patterns.css, v0.3.0). */}
               <Icon name={r.status === 'error' ? 'circle-x' : 'circle-check'} />
             </Pastille>
-            {r.title ? <h3>{r.title}</h3> : null}
+            {r.title ? <h3 id={titleId}>{r.title}</h3> : null}
             {r.message ? <p className="ds-modal__desc ds-modal__desc--block">{r.message}</p> : null}
           </div>
           <div className="ds-modal__foot ds-modal__foot--center">
@@ -137,7 +181,7 @@ export function Modal({
               {closeBtn}
             </div>
           ) : null}
-          {title ? <h3 className="ds-modal__title">{title}</h3> : null}
+          {title ? <h3 id={titleId} className="ds-modal__title">{title}</h3> : null}
           {(description || children) ? (
             <div className="ds-modal__desc">
               {description ? <p className="ds-modal__text">{description}</p> : null}

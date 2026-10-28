@@ -11,6 +11,60 @@ concordent. Le tag n'est pas le but : c'est le péage.
 
 ---
 
+## 0.11.0 — toute fenêtre se nomme
+
+Un reliquat du lot L-008, réglé en L-006. Aucune rupture : une prop facultative, et rien ne
+change à l'écran — blocs de la section Modal de la vitrine, et modale ouverte dans ses quatre
+états (confirm, loading, result succès, result erreur) à 1440 et à 390 px : identiques au
+pixel, en clair et en sombre. Ce qui change est dans l'arbre d'accessibilité.
+
+### Ajouté
+
+- **`Modal aria-label`** — le nom d'une fenêtre SANS titre visible : un contenu qui porte son
+  propre en-tête, ou un résultat sans `result.title`. Même prop, même comportement
+  qu'`ActionSheet` et `Dropdown` en 0.10.0. Ignorée dès qu'un titre visible est là.
+- **Avertissement en développement** : une `Modal` ouverte dont la phase en cours n'affiche
+  aucun titre, sans `aria-label`. Même garde que les autres (`process.env.NODE_ENV`) :
+  absent du build de production.
+- Vitrine : un bloc « Nom accessible » en fin de section Modal — titre en nœud, fenêtre sans
+  titre (`aria-label="Aperçu de la vidéo"`), résultat sans titre (`aria-label="Lien copié"`).
+
+### Changé
+
+- **`Modal` nommée par son titre visible** (`aria-labelledby` vers le titre) au lieu d'un
+  `aria-label` copié du titre. Même nom pour un titre en chaîne ; un titre en nœud
+  (`<>Lancer le <span className="accent">build</span> ?</>`) laissait la fenêtre SANS nom,
+  il est maintenant lu tel qu'affiché.
+- **En phase `result`, c'est `result.title` qui nomme la fenêtre.** Avant : aucun nom quand
+  `title` manquait (les deux spécimens result de la vitrine) ; sinon le `title` de la
+  confirmation, qui n'est plus affiché — la fenêtre s'annonçait « Supprimer ce build ? »
+  en affichant « Build supprimé ».
+- **Ni titre visible ni `aria-label` : repli « Fenêtre »**, au lieu d'aucun nom.
+
+Vérifié dans l'arbre d'accessibilité calculé par Chromium, en clair et en sombre : les 15
+spécimens de la section et la modale « En vrai » dans ses quatre états, à 1440 et à 390 px,
+tous nommés — par `aria-labelledby` partout où un titre s'affiche, par `aria-label` pour les
+deux spécimens sans titre. Leur retirer `aria-label` les fait retomber sur « Fenêtre » et
+fait sortir l'avertissement ; aucun autre spécimen n'en émet. Les autres surfaces modales
+du système étaient déjà nommées : `ActionSheet` et `Dropdown` (0.10.0), la pastille de
+`DatePicker` (« Choisir une date »). Le tiroir mobile de `Sidebar` n'est pas un dialogue
+(`<aside>` et `<nav>`, sans `role="dialog"`).
+
+### Ce que l'app fait en montant le tag
+
+1. La dépendance devient `"@aimotic/ds": "github:Yamiro02/aimotic-design-system#v0.11.0"`,
+   puis `npm install` (le lock prend le SHA du tag).
+2. Rien à changer sur les trois `Modal` existantes : `DeleteConversationConfirm.tsx`,
+   `StepsHelpSheet.tsx` (aides d'installation et de notifications) et `InterestsEditor.tsx`
+   ont toutes un `title` visible, en chaîne, et aucune ne passe en `phase="result"`. Elles
+   passent d'`aria-label` à `aria-labelledby`, même nom.
+3. Toute NOUVELLE `Modal` sans `title` visible prend `aria-label={t('…')}` — en particulier
+   une fenêtre dont l'en-tête vit dans le contenu (les fenêtres de paiement de L-006, si
+   c'est leur cas). De même une `Modal` qui passe en `phase="result"` sans `result.title`.
+4. En développement, la console ne doit montrer aucun `[ds] Modal sans titre visible`.
+
+---
+
 ## 0.10.0 — le menu ⋯ se nomme
 
 Un point du lot L-008 (D-018). Aucune rupture : une prop facultative, et rien ne change à
