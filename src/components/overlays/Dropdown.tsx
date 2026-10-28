@@ -1,7 +1,19 @@
+import { useEffect } from 'react';
 import type { HTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
-/** Menu panel, radius 2xl, --shadow-lg. Items highlight on --accent. */
+/* Remplacé par le bundler de l'app (Vite, webpack…), donc le bloc disparaît en
+   production. `declare` local plutôt qu'une dépendance @types/node ajoutée au paquet —
+   même parade que dans ActionSheet. */
+declare const process: { env: { NODE_ENV?: string } };
+
+/**
+ * Menu panel, radius 2xl, --shadow-lg. Items highlight on --accent.
+ *
+ * NOM ACCESSIBLE — v0.10.0. Le panneau est un role="menu" : `aria-label` le nomme, ou
+ * `aria-labelledby` vers le bouton ⋯ qui l'ouvre. Ni l'un ni l'autre : repli sur « Actions »
+ * et avertissement en développement — comme son jumeau mobile, `ActionSheet`.
+ */
 export interface DropdownItem {
   label?: ReactNode;
   icon?: ReactNode;
@@ -18,11 +30,37 @@ export interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
   items?: DropdownItem[];
   /** Render in flow instead of absolutely positioned. */
   inline?: boolean;
+  /**
+   * Nom accessible du menu (v0.10.0) — le même texte que l'`ActionSheet` jumelle. Repli :
+   * « Actions ». Un `aria-labelledby` passé à la place l'emporte.
+   */
+  'aria-label'?: string;
 }
 
-export function Dropdown({ items = [], inline = false, className = '', ...rest }: DropdownProps): JSX.Element {
+export function Dropdown({
+  items = [], inline = false, className = '',
+  'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy, ...rest
+}: DropdownProps): JSX.Element {
+  /* Filet de développement — un menu sans nom est muet pour le lecteur d'écran, et rien ne
+     le voit à l'écran. */
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    if (ariaLabel || ariaLabelledBy) return;
+    console.warn(
+      '[ds] Dropdown sans `aria-label` ni `aria-labelledby` : le lecteur d\'écran annonce '
+      + '« Actions », qui ne dit pas de quoi c\'est le menu. Passe `aria-label` — le même texte '
+      + 'que l\'ActionSheet jumelle.',
+    );
+  }, [ariaLabel, ariaLabelledBy]);
+
   return (
-    <div className={cn('ds-dropdown', !inline && 'ds-dropdown--floating', className)} role="menu" {...rest}>
+    <div
+      className={cn('ds-dropdown', !inline && 'ds-dropdown--floating', className)}
+      role="menu"
+      aria-labelledby={ariaLabelledBy}
+      aria-label={ariaLabelledBy ? undefined : (ariaLabel ?? 'Actions')}
+      {...rest}
+    >
       {items.map((it, i) => it.separator
         ? <hr key={i} className="ds-dropdown__sep" />
         : (

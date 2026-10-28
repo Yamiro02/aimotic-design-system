@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
 import type { JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { useModalSurface } from './useModalSurface';
@@ -28,6 +28,12 @@ const DESKTOP = '(min-width:64.0625rem)';
  * ABOVE 64 rem — a rule, not a side effect: an ActionSheet NEVER opens as a modal surface
  * (`.ds-scrim--sheet` is display:none above 64 rem). It exists there only as an inline specimen
  * with `panel`: a 20rem panel, four corners at radius 2xl, full border, no grip, no scrim.
+ *
+ * NOM ACCESSIBLE — v0.10.0. Un role="dialog" doit avoir un nom. Avec un `title`, c'est le
+ * titre visible qui nomme la feuille (`aria-labelledby`), qu'il soit une chaîne ou un nœud.
+ * Sans titre — le menu ⋯ d'une conversation, une seule ligne —, `aria-label` donne le nom
+ * sans rien changer à l'écran. Ni l'un ni l'autre : repli sur « Actions » et avertissement
+ * en développement.
  */
 export interface ActionSheetItem {
   label?: ReactNode;
@@ -42,6 +48,7 @@ export interface ActionSheetItem {
 
 export interface ActionSheetProps {
   open?: boolean;
+  /** Visible heading. When present it NAMES the sheet (`aria-labelledby`) — `aria-label` is then ignored. */
   title?: ReactNode;
   subtitle?: ReactNode;
   /** Optional caption above the cancel rule — consequences, quota, warning. */
@@ -57,16 +64,37 @@ export interface ActionSheetProps {
    * hides above 64 rem would render nothing at all.
    */
   panel?: boolean;
+  /**
+   * Nom accessible d'une feuille SANS titre visible (v0.10.0) — aucun effet à l'écran.
+   * Même prop que son jumeau de bureau, `Dropdown` : l'app passe le même texte aux deux
+   * faces du menu ⋯. Ignoré quand `title` est là : le titre visible nomme la feuille.
+   */
+  'aria-label'?: string;
   className?: string;
 }
 
 export function ActionSheet({
   open = true, title, subtitle, note, items = [], cancelLabel = 'Annuler',
-  onCancel, inline = false, panel: asPanel = false, className = '',
+  onCancel, inline = false, panel: asPanel = false, 'aria-label': ariaLabel, className = '',
 }: ActionSheetProps): JSX.Element | null {
   /* `panel` implique `inline` : voir la doc de la prop. */
   const estInline = inline || asPanel;
   const panelRef = useModalSurface({ open, onClose: onCancel, inline: estInline, initialFocus: 'first' });
+  const titleId = useId();
+  const aTitre = Boolean(title);
+
+  /* Filet de développement. Le repli « Actions » donne un nom, pas le BON : il ne dit pas
+     de quoi la feuille est le menu. Effet séparé de celui d'en dessous — `title` est un nœud
+     dont l'identité change à chaque rendu, seul son « présent ou non » compte ici. */
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    if (!open || aTitre || ariaLabel) return;
+    console.warn(
+      '[ds] ActionSheet sans `title` ni `aria-label` : le lecteur d\'écran annonce « Actions », '
+      + 'qui ne dit pas de quoi la feuille est le menu. Sans titre visible, passe `aria-label` '
+      + '— le même texte que le Dropdown jumeau.',
+    );
+  }, [open, aTitre, ariaLabel]);
 
   /* Filet de développement. La règle CSS « pas d'ActionSheet modale au-dessus de 64 rem » est
      tenue par `display:none`, donc muette : sans cet avertissement, un clic sur ⋯ ne produirait
@@ -95,13 +123,14 @@ export function ActionSheet({
       ref={panelRef}
       role="dialog"
       aria-modal={estInline ? undefined : 'true'}
-      aria-label={typeof title === 'string' ? title : 'Actions'}
+      aria-labelledby={aTitre ? titleId : undefined}
+      aria-label={aTitre ? undefined : (ariaLabel ?? 'Actions')}
       className={cn('ds-actionsheet', asPanel && 'ds-actionsheet--panneau', className)}
     >
       <span className="ds-grip" aria-hidden="true" />
       {(title || subtitle) ? (
         <div className="ds-actionsheet__head">
-          {title ? <span className="ds-actionsheet__title">{title}</span> : null}
+          {title ? <span id={titleId} className="ds-actionsheet__title">{title}</span> : null}
           {subtitle ? <span className="ds-actionsheet__subtitle">{subtitle}</span> : null}
         </div>
       ) : null}

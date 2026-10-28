@@ -149,6 +149,7 @@ export function OverlaysPage() {
           </Row>
           <ActionSheet
             open={sheet}
+            aria-label="Actions de la vidéo"
             onCancel={() => setSheet(false)}
             items={[...MENU.map(m => ({ ...m, onSelect: () => setSheet(false) })),
               { label: 'Supprimer', icon: <Icon name="trash-2" size="1rem" />, danger: true, onSelect: () => setSheet(false) }]}
@@ -157,8 +158,8 @@ export function OverlaysPage() {
 
         <Block label="inline panel — la forme desktop" hint="Au-dessus de 64 rem elle n'existe qu'en spécimen : 20rem, quatre coins au rayon 2xl, bordure complète, sans poignée, sans voile.">
           <Row>
-            <ActionSheet inline panel items={MENU} />
-            <ActionSheet inline panel items={[
+            <ActionSheet inline panel aria-label="Actions de la vidéo" items={MENU} />
+            <ActionSheet inline panel aria-label="États d'un item" items={[
               { label: 'Item au repos', icon: <Icon name="file-text" size="1rem" /> },
               { label: 'Item survolé', icon: <Icon name="file-text" size="1rem" />, className: 'is-hover' },
               { label: 'Supprimer la vidéo', icon: <Icon name="trash-2" size="1rem" />, danger: true }]} />
@@ -175,14 +176,14 @@ export function OverlaysPage() {
       <Section title="Dropdown" note="Panneau de menu, rayon 2xl, --shadow-lg. Les items s'éclairent sur la crème --background — sur un panneau blanc, --surface-alt ne se voit plus. DESKTOP ONLY — sous 64 rem, c'est l'ActionSheet ci-dessus qui prend le relais.">
         <Block label="inline — rendu dans le flux" hint="Posé à côté de l'ActionSheet ci-dessus, la parenté se voit : mêmes lignes, mêmes tons. Le Dropdown garde son filet — dense, survolé à la souris — là où la feuille du bas l'a perdu.">
           <Row>
-            <Dropdown inline items={[
+            <Dropdown inline aria-label="Actions de la vidéo" items={[
               { label: 'Copier le lien', icon: <Icon name="copy" size="1rem" /> },
               { label: 'Ouvrir la vidéo', icon: <Icon name="play" size="1rem" />, hint: '⏎' },
               { label: 'Voir les stats', icon: <Icon name="trending-up" size="1rem" /> },
               { separator: true },
               { label: 'Supprimer', icon: <Icon name="trash-2" size="1rem" />, danger: true },
             ]} />
-            <Dropdown inline items={[
+            <Dropdown inline aria-label="États d'un item" items={[
               { label: 'Item au repos', icon: <Icon name="file-text" size="1rem" /> },
               { label: 'Item survolé', icon: <Icon name="file-text" size="1rem" />, className: 'is-hover' },
               { separator: true },

@@ -11,6 +11,56 @@ concordent. Le tag n'est pas le but : c'est le péage.
 
 ---
 
+## 0.10.0 — le menu ⋯ se nomme
+
+Un point du lot L-008 (D-018). Aucune rupture : une prop facultative, et rien ne change à
+l'écran — captures des sections ActionSheet et Dropdown identiques au pixel, en clair et en
+sombre. Ce qui change est dans l'arbre d'accessibilité.
+
+### Ajouté
+
+- **`ActionSheet aria-label`** — le nom d'une feuille SANS titre visible. C'est le cas du
+  menu ⋯ d'une conversation (maquette E5b : une seule ligne, « Supprimer la conversation »,
+  aucun titre). Sans lui, le dialogue s'annonçait « Actions », un repli codé en dur qui ne
+  dit pas de quoi la feuille est le menu. Même prop que le `Dropdown` jumeau : l'app passe
+  le même texte aux deux faces du menu ⋯. Ignorée quand la feuille a un `title`.
+- **`Dropdown aria-label`** déclarée et documentée. Le composant l'acceptait déjà — elle
+  passait avec les attributs du `<div>` —, mais rien ne la demandait : un `Dropdown` sans
+  elle était un `menu` sans nom.
+- **Avertissement en développement**, sur les deux : une `ActionSheet` ouverte sans `title`
+  ni `aria-label`, un `Dropdown` sans `aria-label` ni `aria-labelledby`. Même garde que
+  les autres (`process.env.NODE_ENV`) : absent du build de production.
+
+### Changé
+
+- **`ActionSheet` avec `title` : nommée par son titre visible** (`aria-labelledby` vers
+  le titre) au lieu d'un `aria-label` copié du titre. Même nom pour un titre en chaîne ; un
+  titre en nœud (`<>Options de <b>Claire</b></>`) retombait sur « Actions », il est
+  maintenant lu tel qu'affiché.
+- **`Dropdown` sans nom : repli « Actions »**, comme la feuille, au lieu d'aucun nom. Un
+  `aria-labelledby` passé (vers le bouton ⋯, par exemple) l'emporte sur tout.
+- Vitrine : les spécimens sans titre portent `aria-label` (« Actions de la vidéo »,
+  « États d'un item »), et les deux `Dropdown` aussi.
+
+Vérifié dans l'arbre d'accessibilité calculé par Chromium, à 1440 et à 390 px (feuille
+modale ouverte) : feuilles sans titre et menus nommés par leur `aria-label`, feuille titrée
+nommée « Vidéo 3 — le déploiement » par `aria-labelledby`. Retirer les `aria-label` de la
+vitrine fait sortir les deux avertissements ; la feuille titrée n'en émet aucun.
+
+### Ce que l'app fait en montant le tag
+
+1. La dépendance devient `"@aimotic/ds": "github:Yamiro02/aimotic-design-system#v0.10.0"`,
+   puis `npm install` (le lock prend le SHA du tag).
+2. Dans `ChatHeader.tsx`, l'`<ActionSheet>` du menu ⋯ prend
+   `aria-label={t('chat.menu.label')}` — le même texte que le `Dropdown` voisin, qui l'a
+   déjà, et que le libellé du bouton ⋯. Aucune nouvelle clé de traduction.
+3. Rien d'autre : la feuille « Je suis » d'`AccountInfoForm.tsx` a un `title`, elle est
+   nommée par lui ; le `Dropdown` de `ChatHeader.tsx` passe déjà `aria-label`. En
+   développement, la console ne doit plus montrer aucun `[ds] ActionSheet sans` ni
+   `[ds] Dropdown sans`.
+
+---
+
 ## 0.9.0 — au doigt, rien ne bouge
 
 Deux reliquats du lot L-004, vus sur iPhone. Aucune rupture : aucune API ne change, le

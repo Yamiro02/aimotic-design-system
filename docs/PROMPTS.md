@@ -1179,20 +1179,28 @@ signale en console en développement). Au-dessus de 64rem, le même geste ouvre 
 ```tsx
 <ActionSheet
   open={sheet}
+  aria-label="Actions de la vidéo"
   onCancel={() => setSheet(false)}
   items={[
     { label: 'Copier le lien', icon: <Icon name="copy" size="1rem" />, onSelect: () => setSheet(false) },
     { label: 'Supprimer', icon: <Icon name="trash-2" size="1rem" />, danger: true },
   ]}
 />
-<ActionSheet inline panel items={[{ label: 'Copier le lien' }]} />
+<ActionSheet inline panel aria-label="Actions de la vidéo" items={[{ label: 'Copier le lien' }]} />
 ```
 
 - Props : `open` · `title` / `subtitle` (en-tête optionnel) · `note` (légende de
   conséquence au-dessus d'Annuler) · `items`
   (`{label, icon?, danger?, onSelect?, className?}[]`) · `cancelLabel` ·
   `onCancel` · `inline` (sans voile) · `panel` (spécimen desktop 20rem — implique
-  `inline`).
+  `inline`) · `aria-label` (nom d'une feuille sans titre, v0.10.0).
+- **Nom accessible — toujours** (v0.10.0). La feuille est un `role="dialog"`, et un
+  dialogue sans nom est muet pour le lecteur d'écran. Avec `title`, c'est le titre visible
+  qui la nomme (`aria-labelledby`), chaîne ou nœud. **Sans titre** — le menu ⋯ d'une
+  conversation, une seule ligne —, passe `aria-label` : aucun effet à l'écran. Le MÊME texte
+  que le `Dropdown` jumeau, en pratique celui du bouton ⋯ qui l'ouvre. Ni l'un ni l'autre :
+  repli sur « Actions », qui ne dit pas de quoi c'est le menu, et avertissement en
+  développement. Avec un `title`, `aria-label` est ignoré.
 - **Pas de séparateur** (v0.8.0) : l'item `separator` a été retiré, la feuille n'émet plus
   aucun `<hr>`. C'est `Dropdown` qui garde le sien.
 - États rendus : fermée, ouverte (feuille), item au repos / survolé / danger, panneau
@@ -1207,17 +1215,22 @@ sur `--surface-alt`.
 **Ne pas l'utiliser** comme select de formulaire (c'est `Select`).
 
 ```tsx
-<Dropdown items={[
+<Dropdown aria-label="Actions de la vidéo" items={[
   { label: 'Copier le lien', icon: <Icon name="copy" size="1rem" /> },
   { label: 'Ouvrir la vidéo', icon: <Icon name="play" size="1rem" />, hint: '⏎' },
   { separator: true },
   { label: 'Supprimer', icon: <Icon name="trash-2" size="1rem" />, danger: true },
 ]} />
-<Dropdown inline items={[{ label: 'Spécimen dans le flux' }]} />
+<Dropdown inline aria-label="Spécimen" items={[{ label: 'Spécimen dans le flux' }]} />
 ```
 
 - Props : `items` (`{label, icon?, hint?, danger?, separator?, onSelect?, className?}[]`)
-  · `inline` (rendu dans le flux, sans positionnement absolu).
+  · `inline` (rendu dans le flux, sans positionnement absolu) · `aria-label` (nom du menu,
+  v0.10.0) · plus les attributs d'un `<div>`.
+- **Nom accessible — toujours** (v0.10.0). Le panneau est un `role="menu"` : `aria-label`
+  le nomme — le même texte que l'`ActionSheet` jumelle —, ou `aria-labelledby` vers le
+  bouton ⋯ qui l'ouvre, qui l'emporte alors. Ni l'un ni l'autre : repli sur « Actions » et
+  avertissement en développement, comme la feuille.
 - États rendus : item au repos, survolé, danger, séparateur.
 
 ## Modal
