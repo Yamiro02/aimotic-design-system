@@ -11,6 +11,40 @@ concordent. Le tag n'est pas le but : c'est le péage.
 
 ---
 
+## 0.12.0 — le cadenas et la carte
+
+Un point du lot L-009 (D-019), relevé en L-006 par l'app. Aucune rupture : deux noms de plus
+dans `IconName`, rien ne change pour les 51 autres.
+
+### Ajouté
+
+- **`Icon` — `lock`** (52 glyphes) : le cadenas de « Paiement sécurisé, sans quitter l'app »
+  (et de « Quelques secondes — ne ferme pas l'app » pendant le paiement), maquette F Paiement.
+- **`Icon` — `credit-card`** (53 glyphes) : le moyen de paiement — la tuile devant la carte
+  enregistrée, et le champ du numéro de carte, maquette F Paiement.
+- Les deux tracés sont ceux de lucide, sous ces noms (`Lock`, `CreditCard`) d'un bout à
+  l'autre de la plage du peer : présents et dessinés à l'identique en 0.400.0 et en 0.469.0
+  (celle du dépôt et de la maquette), toujours exportés en 1.63.0. Pas de dessin de
+  compatibilité, à la différence de `house`.
+- Vitrine : les deux dans le jeu complet, après `heart` ; le bloc Tailles montre chaque cran
+  sur trois silhouettes — `circle-check` (ronde), `lock` (haute), `credit-card` (large).
+
+### Ce que l'app fait en montant le tag
+
+1. La dépendance devient `"@aimotic/ds": "github:Yamiro02/aimotic-design-system#v0.12.0"`,
+   puis `npm install` (le lock prend le SHA du tag).
+2. `lock` là où la maquette le montre : devant la légende sous « Payer », dans ses deux états
+   (`PaymentOptions.tsx`, l'emplacement est marqué d'un commentaire). La maquette le pose à
+   `0.875rem`, comme le glyphe d'un message d'erreur, à côté d'une légende.
+3. `credit-card` là où la maquette le montre : la tuile devant la carte enregistrée
+   (`PaymentMethodCard.tsx`, idem). La maquette : tuile `2.5rem`, `--radius-md`,
+   `--surface-alt`, icône `1.125rem`.
+4. Ailleurs, l'app a déjà noté une icône provisoire qui attendait `lock` (hors paiement) :
+   `NotificationsHelpSheet.tsx` (étape 1 Android, `info`) et `AppearanceFields.tsx` (phrase
+   d'information des origines, `eye-off`). À remplacer si le lot le prévoit.
+
+---
+
 ## 0.11.0 — toute fenêtre se nomme
 
 Un reliquat du lot L-008, réglé en L-006. Aucune rupture : une prop facultative, et rien ne

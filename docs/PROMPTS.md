@@ -951,7 +951,7 @@ l'Input. `forwardRef` sur le `<textarea>` natif — la ref reste branchée avec 
 ## Icon
 
 LE système d'icônes : Lucide, exclusivement. Jamais un emoji, jamais un SVG dessiné à la
-main. 51 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
+main. 53 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
 c'est voulu.
 
 **Ne pas** chercher `youtube` ou `instagram` ici : les icônes de PLATEFORME vivent dans
@@ -974,7 +974,7 @@ enregistrée `inherits: false`, une règle de conteneur est inerte, et c'est vou
 ```
 
 **Ce que le catalogue ne couvre pas se passe en `glyph`.** Lucide compte ~1500 tracés ;
-le catalogue en cure 51 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
+le catalogue en cure 53 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
 ses propres règles — même grille, même épaisseur. Plus besoin de publier une version du
 design system pour une icône.
 

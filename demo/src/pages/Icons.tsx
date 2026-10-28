@@ -10,17 +10,29 @@ const NAMES: IconName[] = [
   'trending-up', 'user', 'book-open', 'message-square', 'quote', 'rocket', 'file-text',
   'chevrons-left', 'chevrons-right', 'ellipsis', 'panel-left', 'sliders-horizontal',
   'layout-dashboard', 'house', 'video', 'dumbbell', 'settings', 'log-out', 'heart',
+  'lock', 'credit-card',
+];
+
+/* Le cran se juge sur plusieurs silhouettes : un rond plein la grille, un glyphe plus haut
+   que large, un plus large que haut ne lisent pas pareil à la même taille. */
+const SIZE_GLYPHS: IconName[] = ['circle-check', 'lock', 'credit-card'];
+const SIZES = [
+  { size: '1rem', token: 'size="1rem"' },
+  { size: '1.125rem', token: 'size="1.125rem" (contrôle md, TabBar)' },
+  { size: '1.25rem', token: 'size="1.25rem" (défaut)' },
+  { size: '1.5rem', token: 'size="1.5rem"' },
 ];
 
 export function IconsPage() {
   return (
     <div className="flex flex-col gap-space-7">
       <Section title="Icônes" note="Lucide, exclusivement. Aucun emoji dans l'interface, aucun caractère unicode décoratif — sauf le point médian. (Le contenu des personas, lui, peut porter des emoji.)">
-        <Block label="Tailles" hint="1rem · 1.125rem (contrôle md, TabBar) · 1.25rem (défaut) · 1.5rem. Toujours en rem, jamais en px.">
-          <Spec token="size=&quot;1rem&quot;"><Icon name="circle-check" size="1rem" /></Spec>
-          <Spec token="size=&quot;1.125rem&quot; (contrôle md, TabBar)"><Icon name="circle-check" size="1.125rem" /></Spec>
-          <Spec token="size=&quot;1.25rem&quot; (défaut)"><Icon name="circle-check" size="1.25rem" /></Spec>
-          <Spec token="size=&quot;1.5rem&quot;"><Icon name="circle-check" size="1.5rem" /></Spec>
+        <Block label="Tailles" hint="1rem · 1.125rem (contrôle md, TabBar) · 1.25rem (défaut) · 1.5rem. Toujours en rem, jamais en px. Trois silhouettes par cran — ronde, haute, large.">
+          {SIZES.map(({ size, token }) => (
+            <Spec key={size} token={token}>
+              {SIZE_GLYPHS.map(name => <Icon key={name} name={name} size={size} />)}
+            </Spec>
+          ))}
         </Block>
 
         <Block label="Graisses" hint="C'est la RÈGLE CSS qui décide, pas la prop : 1.75 partout, 1.5 dans une tuile (badge, toast, bandeau, pastille, erreur), 2.5 dans une case à cocher. strokeWidth n'écrit qu'un attribut de présentation, que la règle recouvre — pour forcer, c'est un style inline.">
